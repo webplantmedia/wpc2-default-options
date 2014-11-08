@@ -23,21 +23,13 @@ $plugin_prefix = $this->get_plugin_prefix();
 
 	<form method="post" action="">
 
-		<?php if ( isset( $_POST['wpc2_iec_generate_default_options'] ) && $_POST['wpc2_iec_generate_default_options'] ) : ?>
+		<input type="hidden" name="wpc2_iec_generate_default_options_php" value="1" />
 
-			<div>
+		<?php submit_button( 'Display default-options.php' ); ?>
 
-				<h3><?php echo __( 'PHP Array of Default Customizer Options', 'wpc2-default-options' ); ?></h3>
+	</form>
 
-				<div class="postbox">
-
-					<?php $this->display_customizer_options(); ?>
-
-				</div>
-
-			</div>
-	
-		<?php endif; ?>
+	<form method="post" action="">
 
 		<input type="hidden" name="wpc2_iec_generate_default_options" value="1" />
 
@@ -47,26 +39,54 @@ $plugin_prefix = $this->get_plugin_prefix();
 
 	<form method="post" action="">
 
-		<?php if ( isset( $_POST['wpc2_iec_restore_default_options'] ) && $_POST['wpc2_iec_restore_default_options'] ) : ?>
-
-			<div>
-
-				<h3><?php echo __( 'Restoring Default Options', 'wpc2-default-options' ); ?></h3>
-
-				<div class="postbox">
-
-					<?php $this->restore_default_options(); ?>
-
-				</div>
-
-			</div>
-	
-		<?php endif; ?>
-
 		<input type="hidden" name="wpc2_iec_restore_default_options" value="1" />
 
 		<?php submit_button( 'Restore Default Options' ); ?>
 
 	</form>
+
+	<?php if ( isset( $_POST['wpc2_iec_generate_default_options_php'] ) && $_POST['wpc2_iec_generate_default_options_php'] ) : ?>
+
+		<div>
+
+			<h3><?php echo __( 'default-options.php', 'wpc2-default-options' ); ?></h3>
+
+			<textarea id="wpc2-default-options-php" cols="70" rows="30"><?php $this->display_default_options_php(); ?></textarea>
+
+		</div>
+
+	<?php endif; ?>
+
+	<?php if ( isset( $_POST['wpc2_iec_generate_default_options'] ) && $_POST['wpc2_iec_generate_default_options'] ) : ?>
+
+		<div>
+
+			<h3><?php echo __( 'PHP Array of Default Customizer Options', 'wpc2-default-options' ); ?></h3>
+
+			<div class="postbox">
+
+				<?php $this->display_customizer_options(); ?>
+
+			</div>
+
+		</div>
+
+	<?php endif; ?>
+
+	<?php if ( isset( $_POST['wpc2_iec_restore_default_options'] ) && $_POST['wpc2_iec_restore_default_options'] ) : ?>
+
+		<div>
+
+			<h3><?php echo __( 'Restoring Default Options', 'wpc2-default-options' ); ?></h3>
+
+			<div class="postbox">
+
+				<?php $this->restore_default_options(); ?>
+
+			</div>
+
+		</div>
+
+	<?php endif; ?>
 
 </div>

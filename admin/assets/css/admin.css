@@ -9,3 +9,10 @@
 	padding-left: 20px;
 	padding-right: 20px;
 }
+#wpc2-default-options-php {
+	font-family: Consolas,Monaco,monospace;
+	font-size: 13px;
+	width: 97%;
+	background: none repeat scroll 0% 0% #F9F9F9;
+	outline: medium none;
+}

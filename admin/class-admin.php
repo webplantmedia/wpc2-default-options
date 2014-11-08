@@ -186,6 +186,66 @@ class WPC2_Default_Options_Admin {
 		);
 
 	}
+
+	private function check_for_local_development( $template ) {
+		if ( 'wpcanvas2' == $template ) {
+			$theme = wp_get_theme( $template );
+
+			switch ( $theme->Name ) {
+				case 'Meadowbrook - Premium' :
+					return 'meadowbrook-premium';
+					break;
+			}
+		}
+
+		return $template;
+	}
+
+	private function get_remote_default_options_php() {
+		if ( ! defined( 'GITHUB_TOKEN' ) || ! defined( 'GITHUB_URL' ) ) {
+			return "Need to define constant GITHUB_TOKEN and GITHUB_URL in your config.php file";
+		}
+
+		$template = get_template();
+		$template = $this->check_for_local_development( $template );
+
+		$url = GITHUB_URL . '?ref=' . $template;
+
+		$options = array(
+			'method' => 'GET',
+			'headers' => array(
+				'Authorization' => 'token ' . GITHUB_TOKEN,
+				'Accept' => 'application/vnd.github.v3.raw',
+			),
+			'sslverify' => false,
+			'sslcertificates' => '',
+		);
+
+		$raw_response = wp_remote_post( $url, $options );
+
+		if ( is_wp_error( $raw_response ) || 200 != wp_remote_retrieve_response_code( $raw_response ) )
+			return "Could not get file";
+
+		$response = wp_remote_retrieve_body( $raw_response );
+
+		return $response;
+	}
+	
+	public function display_default_options_php() {
+		global $wpc2_default;
+
+		if ( ! $mods = get_theme_mods() ) {
+			echo '<p>No Data</p>';
+			return;
+		}
+
+		$uri = get_template_directory_uri();
+		$uri_esc = preg_quote( $uri, '/' );
+
+		$file = $this->get_remote_default_options_php();
+
+		echo esc_textarea( $file );
+	}
 	
 	public function display_customizer_options() {
 		global $wpc2_default;
