@@ -2,7 +2,7 @@
 /**
  * Fired when the plugin is uninstalled.
  *
- * @package   WPC_Import_Export_Customizer
+ * @package   WPC2_Default_Options
  * @author    Chris Baldelomar <chris@webplantmedia.com>
  * @license   GPL-2.0+
  * @link      http://webplantmedia.com

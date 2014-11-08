@@ -5,7 +5,7 @@
  * This includes the header, options, and other information that should provide
  * The User Interface to the end user.
  *
- * @package   WPC_Import_Export_Customizer
+ * @package   WPC2_Default_Options
  * @author    Chris Baldelomar <chris@webplantmedia.com>
  * @license   GPL-2.0+
  * @link      http://webplantmedia.com
@@ -17,7 +17,7 @@ $plugin_prefix = $this->get_plugin_prefix();
 ?>
 
 
-<div id="wpc-import-export-customizer-plugin" class="wrap">
+<div id="wpc2-default-options-plugin" class="wrap">
 
 	<h2><?php echo esc_html( get_admin_page_title() ); ?></h2>
 
@@ -27,7 +27,7 @@ $plugin_prefix = $this->get_plugin_prefix();
 
 			<div>
 
-				<h3><?php echo __( 'PHP Array of Default Customizer Options', 'wpc-import-export-customizer' ); ?></h3>
+				<h3><?php echo __( 'PHP Array of Default Customizer Options', 'wpc2-default-options' ); ?></h3>
 
 				<div class="postbox">
 
@@ -51,7 +51,7 @@ $plugin_prefix = $this->get_plugin_prefix();
 
 			<div>
 
-				<h3><?php echo __( 'Restoring Default Options', 'wpc-import-export-customizer' ); ?></h3>
+				<h3><?php echo __( 'Restoring Default Options', 'wpc2-default-options' ); ?></h3>
 
 				<div class="postbox">
 

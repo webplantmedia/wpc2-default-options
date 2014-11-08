@@ -1,8 +1,8 @@
 <?php
 /**
- * WPC Import Export Customizer.
+ * WPC2 Default Options.
  *
- * @package   WPC_Import_Export_Customizer_Admin
+ * @package   WPC2_Default_Options_Admin
  * @author    Chris Baldelomar <chris@webplantmedia.com>
  * @license   GPL-2.0+
  * @link      http://webplantmedia.com
@@ -16,10 +16,10 @@
  * If you're interested in introducing public-facing
  * functionality, then refer to `class-plugin-name.php`
  *
- * @package   WPC_Import_Export_Customizer_Admin
+ * @package   WPC2_Default_Options_Admin
  * @author  Chris Baldelomar <chris@webplantmedia.com>
  */
-class WPC_Import_Export_Customizer_Admin {
+class WPC2_Default_Options_Admin {
 
 	/**
 	 * Instance of this class.
@@ -29,8 +29,8 @@ class WPC_Import_Export_Customizer_Admin {
 	 * @var      object
 	 */
 	protected static $instance = null;
-	protected $plugin_slug = 'wpc-import-export-customizer';
-	protected $plugin_prefix = 'wpc_import_export_customizer';
+	protected $plugin_slug = 'wpc2-default-options';
+	protected $plugin_prefix = 'wpc2_default_options';
 
 	/**
 	 * Slug of the plugin screen.
@@ -41,7 +41,7 @@ class WPC_Import_Export_Customizer_Admin {
 	 */
 	protected $plugin_screen_hook_suffix = null;
 
-	const VERSION = '1.1';
+	const VERSION = '1.0';
 
 	/**
 	 * Initialize the plugin by loading admin scripts & styles and adding a
@@ -50,7 +50,7 @@ class WPC_Import_Export_Customizer_Admin {
 	 * @since     1.0.0
 	 */
 	private function __construct() {
-		define( 'WPC_IMPORT_EXPORT_CUSTOMIZER_IS_ACTIVATED', true );
+		define( 'WPC2_DEFAULT_OPTIONS_IS_ACTIVATED', true );
 
 		// Load admin style sheet and JavaScript.
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_styles' ) );
@@ -146,8 +146,8 @@ class WPC_Import_Export_Customizer_Admin {
 		 */
 		$this->plugin_screen_hook_suffix = add_submenu_page(
 			'tools.php',
-			__( 'Import/Export Customizer', 'wpc-import-export-customizer' ),
-			__( 'Import/Export Customizer', 'wpc-import-export-customizer' ),
+			__( 'Default Options', 'wpc2-default-options' ),
+			__( 'Default Options', 'wpc2-default-options' ),
 			'manage_options',
 			$this->plugin_slug,
 			array( $this, 'display_plugin_admin_page' )
@@ -180,7 +180,7 @@ class WPC_Import_Export_Customizer_Admin {
 
 		return array_merge(
 			array(
-				'settings' => '<a href="' . admin_url( 'tools.php?page=' . $this->plugin_slug ) . '">' . __( 'Settings', 'wpc-import-export-customizer' ) . '</a>'
+				'settings' => '<a href="' . admin_url( 'tools.php?page=' . $this->plugin_slug ) . '">' . __( 'Settings', 'wpc2-default-options' ) . '</a>'
 			),
 			$links
 		);
