@@ -54,6 +54,7 @@ class WPC2_Default_Options_Admin {
 
 		// Load admin style sheet and JavaScript.
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_styles' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ) );
 
 		// Add the options page and menu item.
 		add_action( 'admin_menu', array( $this, 'add_plugin_admin_menu' ) );
@@ -119,6 +120,28 @@ class WPC2_Default_Options_Admin {
 		$screen = get_current_screen();
 		if ( $this->plugin_screen_hook_suffix == $screen->id ) {
 			wp_enqueue_style( $this->plugin_slug .'-admin-styles', plugins_url( 'assets/css/admin.css', __FILE__ ), array(), self::VERSION );
+		}
+
+	}
+
+	/**
+	 * Register and enqueue admin-specific JavaScript.
+	 *
+	 * @TODO:
+	 *
+	 * @since     1.0.0
+	 *
+	 * @return    null    Return early if no settings page is registered.
+	 */
+	public function enqueue_admin_scripts() {
+
+		if ( ! isset( $this->plugin_screen_hook_suffix ) ) {
+			return;
+		}
+
+		$screen = get_current_screen();
+		if ( $this->plugin_screen_hook_suffix == $screen->id ) {
+			wp_enqueue_script( $this->plugin_slug . '-admin-script', plugins_url( 'assets/js/admin.js', __FILE__ ), array( 'jquery' ), self::VERSION );
 		}
 
 	}
@@ -230,6 +253,105 @@ class WPC2_Default_Options_Admin {
 
 		return $response;
 	}
+
+	private function get_default_options_php() {
+		$template_path = get_template_directory();
+		$file = $template_path . "/inc/default-options.php";
+
+		if ( ! is_file( $file ) )
+			return "File '/inc/default-options.php' does not exist";
+
+		$content = '';
+		if ( filesize( $file ) > 0 ) {
+			$f = fopen($file, 'r');
+			$content = fread($f, filesize($file));
+			fclose( $f );
+		}
+
+		return $content;
+	}
+
+	private function search_replace_customizer_options( $file ) {
+		global $wpc2_default;
+		$download = array();
+
+		if ( ! $mods = get_theme_mods() ) {
+			return $file;
+		}
+
+		$uri = get_template_directory_uri();
+		$uri_esc = preg_quote( $uri, '/' );
+		$at_font_face = preg_quote( '@font-face', '/' );
+
+		foreach ( $wpc2_default as $key => $value ) {
+			if ( array_key_exists( $key, $mods ) ) {
+				$value = $mods[ $key ];
+			}
+
+			if ( 'custom_css' == $key && ! empty( $value ) ) {
+				echo '<h4><strong>TODO</strong>: Manage Custom CSS</h4>';
+				echo '<pre>'.$value.'</pre>';
+				continue;
+			}
+
+			if ( 'favicon' == $key ) {
+				echo '<h4><strong>NOTICE</strong>: Not saving favicon image in default options</h4>';
+				echo '<pre>'.$value.'</pre>';
+				continue;
+			}
+
+			$value = "'" . $value . "'";
+
+			if ( preg_match( '/'.$at_font_face.'.*/', $value ) ) {
+				if ( preg_match_all( '/(https?\:\/\/.*?)\.(woff|woff2|eot|ttf|svg)/s', $value, $matches ) ) {
+					if ( isset( $matches[0] ) && ! empty( $matches[0] ) ) {
+						$matches = array_unique( $matches[0] );
+						$download[] = array(
+							'key' => $key,
+							'newname' => '',
+							'url' => $matches,
+						);
+					}
+				}
+
+				$value = str_replace( "'".$uri, "'\" . get_template_directory_uri() . \"", $value );
+				$value = trim( $value, "'" );
+				$value = "trim(\"\n" . $value . "\n\")";
+				// remove any @font-face rules so we can easily search and replace
+				$file = preg_replace( '/^\$wpc2\_default\[\'' . preg_quote( $key, '/' ) . '\'\].*$/m', '$wpc2_default[\'' . $key . '\'] = "";', $file );
+				$file = preg_replace( '/^\@font-face\s\{.*?"\)\;[\\n|\\r\\n]/ms', '', $file );
+
+			}
+			else if ( preg_match( '/'.$uri_esc.'.*/', $value ) ) {
+				$value = 'get_template_directory_uri() . ' . str_replace( $uri, '', $value );
+			}
+			else if ( preg_match( '/(https?\:\/\/.*?)\.(jpe?g|png|gif|bmp)/', $value, $matches ) ) {
+				if ( isset( $matches[0] ) && ! empty( $matches[0] ) ) {
+					$image = $matches[0];
+
+					$pathinfo = pathinfo( $image );
+					$newname = str_replace( '_', '-', $key ) . '.' . $pathinfo['extension'];
+					$value = 'get_template_directory_uri() . \'/img/' . $newname . '\'';
+
+					$download[] = array(
+						'key' => $key,
+						'newname' => $newname,
+						'url' => $matches[0],
+					);
+				}
+			}
+
+			if ( $value != strip_tags( $value ) ) {
+				$value = htmlspecialchars( $value );
+			}
+
+			$file = preg_replace( '/^\$wpc2\_default\[\'' . preg_quote( $key, '/' ) . '\'\].*$/m', '$wpc2_default[\'' . $key . '\'] = '.$value.';', $file );
+		}
+
+		include_once( 'views/download-media.php' );
+
+		return trim( $file );
+	}
 	
 	public function display_default_options_php() {
 		global $wpc2_default;
@@ -242,9 +364,11 @@ class WPC2_Default_Options_Admin {
 		$uri = get_template_directory_uri();
 		$uri_esc = preg_quote( $uri, '/' );
 
-		$file = $this->get_remote_default_options_php();
+		$file = $this->get_default_options_php();
 
-		echo esc_textarea( $file );
+		$file = $this->search_replace_customizer_options( $file );
+
+		include_once( 'views/default-options.php' );
 	}
 	
 	public function display_customizer_options() {
@@ -257,6 +381,7 @@ class WPC2_Default_Options_Admin {
 
 		$uri = get_template_directory_uri();
 		$uri_esc = preg_quote( $uri, '/' );
+		$at_font_face = preg_quote( '@font-face', '/' );
 
 		echo '<pre>';
 		foreach ( $wpc2_default as $key => $value ) {
@@ -264,16 +389,23 @@ class WPC2_Default_Options_Admin {
 				$value = $mods[ $key ];
 			}
 
-			$value = "'" . $value . "';";
+			$value = "'" . $value . "'";
 
-			if ( preg_match( '/'.$uri_esc.'.*/', $value ) ) {
+			if ( preg_match( '/'.$at_font_face.'.*/', $value ) ) {
+				// $value = preg_replace( "/(['|\"])".preg_quote( $uri, '/' )."/", 'get_template_directory_uri() . \\1', $value );
+				$value = str_replace( "'".$uri, "'\" . get_template_directory_uri() . \"", $value );
+				$value = trim( $value, "'" );
+				$value = "trim(\"\n" . $value . "\n\")";
+			}
+			else if ( preg_match( '/'.$uri_esc.'.*/', $value ) ) {
 				$value = 'get_template_directory_uri() . ' . str_replace( $uri, '', $value );
 			}
+
 			if ( $value != strip_tags( $value ) ) {
 				$value = htmlspecialchars( $value );
 			}
 
-			echo '$wpc2_default[\'' . $key . '\'] = '.$value.'<br />';
+			echo '$wpc2_default[\'' . $key . '\'] = '.$value.';<br />';
 		}
 		echo '</pre>';
 	}

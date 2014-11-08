@@ -51,7 +51,7 @@ $plugin_prefix = $this->get_plugin_prefix();
 
 			<h3><?php echo __( 'default-options.php', 'wpc2-default-options' ); ?></h3>
 
-			<textarea id="wpc2-default-options-php" cols="70" rows="30"><?php $this->display_default_options_php(); ?></textarea>
+			<?php $this->display_default_options_php(); ?>
 
 		</div>
 
