@@ -37,14 +37,6 @@ $plugin_prefix = $this->get_plugin_prefix();
 
 	</form>
 
-	<form method="post" action="">
-
-		<input type="hidden" name="wpc2_iec_restore_default_options" value="1" />
-
-		<?php submit_button( 'Restore Default Options' ); ?>
-
-	</form>
-
 	<?php if ( isset( $_POST['wpc2_iec_generate_default_options_php'] ) && $_POST['wpc2_iec_generate_default_options_php'] ) : ?>
 
 		<div>
@@ -66,22 +58,6 @@ $plugin_prefix = $this->get_plugin_prefix();
 			<div class="postbox">
 
 				<?php $this->display_customizer_options(); ?>
-
-			</div>
-
-		</div>
-
-	<?php endif; ?>
-
-	<?php if ( isset( $_POST['wpc2_iec_restore_default_options'] ) && $_POST['wpc2_iec_restore_default_options'] ) : ?>
-
-		<div>
-
-			<h3><?php echo __( 'Restoring Default Options', 'wpc2-default-options' ); ?></h3>
-
-			<div class="postbox">
-
-				<?php $this->restore_default_options(); ?>
 
 			</div>
 
