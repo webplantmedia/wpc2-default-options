@@ -316,7 +316,7 @@ class WPC2_Default_Options_Admin {
 			$value = "'" . $value . "'";
 
 			if ( preg_match( '/'.$at_font_face.'.*/', $value ) ) {
-				if ( preg_match_all( '/(https?\:\/\/.*?)\.(woff|woff2|eot|ttf|svg)/s', $value, $matches ) ) {
+				if ( preg_match_all( '/(https?\:\/\/.*?)\.(woff2?|eot|ttf|svg)/s', $value, $matches ) ) {
 					if ( isset( $matches[0] ) && ! empty( $matches[0] ) ) {
 						$matches = array_unique( $matches[0] );
 						$download[] = array(
@@ -328,7 +328,7 @@ class WPC2_Default_Options_Admin {
 				}
 
 				$value = str_replace( "'".$uri, "'\" . get_template_directory_uri() . \"", $value );
-				$value = preg_replace( '/(\'https?\:\/\/.*?)([A-Za-z0-1\-_]+)\.(eot|woff|woff2|ttf|svg)/', "'\" . get_template_directory_uri() . \"/fonts/\\2.\\3", $value );
+				$value = preg_replace( '/(\'https?\:\/\/.*?)([A-Za-z0-1\-_]+)\.(eot|woff2?|ttf|svg)/', "'\" . get_template_directory_uri() . \"/fonts/\\2.\\3", $value );
 				$value = trim( $value, "'" );
 				$value = "trim(\"\n" . $value . "\n\")";
 				// remove any @font-face rules so we can easily search and replace
