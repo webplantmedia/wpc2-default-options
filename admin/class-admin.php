@@ -328,6 +328,7 @@ class WPC2_Default_Options_Admin {
 				}
 
 				$value = str_replace( "'".$uri, "'\" . get_template_directory_uri() . \"", $value );
+				$value = preg_replace( '/(\'https?\:\/\/.*?)([A-Za-z0-1\-_]+)\.(eot|woff|woff2|ttf|svg)/', "'\" . get_template_directory_uri() . \"/fonts/\\2.\\3", $value );
 				$value = trim( $value, "'" );
 				$value = "trim(\"\n" . $value . "\n\")";
 				// remove any @font-face rules so we can easily search and replace
@@ -375,9 +376,6 @@ class WPC2_Default_Options_Admin {
 			echo '<p>No Data</p>';
 			return;
 		}
-
-		$uri = get_template_directory_uri();
-		$uri_esc = preg_quote( $uri, '/' );
 
 		$file = $this->get_default_options_php();
 
