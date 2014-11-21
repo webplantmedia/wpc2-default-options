@@ -36,7 +36,7 @@ Thank you so much for even considering supporting my work. If you have benefited
 
 ## Changelog ##
 
-### Version 1.2
+### Version 1.3
 
 * Plugin released.  Everything is new!
 
