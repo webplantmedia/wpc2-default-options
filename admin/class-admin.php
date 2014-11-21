@@ -271,6 +271,17 @@ class WPC2_Default_Options_Admin {
 		return $content;
 	}
 
+	private function normalize($s) {
+		// Normalize line endings
+		// Convert all line-endings to UNIX format
+		$s = str_replace("\r\n", "\n", $s);
+		$s = str_replace("\r", "\n", $s);
+		// Don't allow out-of-control blank lines
+		$s = preg_replace("/\n{2,}/", "\n\n", $s);
+
+		return $s;
+	}
+
 	private function search_replace_customizer_options( $file ) {
 		global $wpc2_default;
 		$download = array();
@@ -288,9 +299,11 @@ class WPC2_Default_Options_Admin {
 				$value = $mods[ $key ];
 			}
 
-			if ( 'custom_css' == $key && ! empty( $value ) ) {
-				echo '<h4><strong>TODO</strong>: Manage Custom CSS</h4>';
-				echo '<pre>'.$value.'</pre>';
+			if ( 'custom_css' == $key ) {
+				if ( ! empty( $value ) ) {
+					echo '<h4><strong>TODO</strong>: Manage Custom CSS</h4>';
+					echo '<pre>'.$value.'</pre>';
+				}
 				continue;
 			}
 
@@ -349,6 +362,8 @@ class WPC2_Default_Options_Admin {
 		}
 
 		include_once( 'views/download-media.php' );
+
+		$file = $this->normalize( $file );
 
 		return trim( $file );
 	}
