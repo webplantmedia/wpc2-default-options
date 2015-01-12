@@ -426,24 +426,30 @@ class WPC2_Default_Options_Admin {
 	public function restore_default_options() {
 		global $wpc2_default;
 		$restored = false;
+		$message = '';
 
 		if ( ! $mods = get_theme_mods() ) {
 			echo '<p>No Data</p>';
 			return;
 		}
 
-		echo '<p>The following options have been restored:</p>';
-		echo '<p>';
+		$message .= '<p>The following options have been restored:</p>';
+		$message .= '<p>';
 		foreach ( $wpc2_default as $key => $value ) {
 			if ( array_key_exists( $key, $mods ) ) {
 				remove_theme_mod( $key );
-				echo $key . '<br />';
+				$message .= $key . '<br />';
 				$restored = true;
 			}
 		}
+
 		if ( ! $restored ) {
-			echo "No options to restore.";
+			echo "<p>No options to restore.</p>";
+			return;
 		}
-		echo '</p>';
+
+		$message .= '</p>';
+
+		echo $message;
 	}
 }

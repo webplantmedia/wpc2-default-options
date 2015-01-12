@@ -23,7 +23,7 @@ $plugin_prefix = $this->get_plugin_prefix();
 
 	<form method="post" action="">
 
-		<input type="hidden" name="wpc2_iec_generate_default_options_php" value="1" />
+		<input type="hidden" name="wpc2_generate_default_options_php" value="1" />
 
 		<?php submit_button( 'Display default-options.php' ); ?>
 
@@ -31,13 +31,21 @@ $plugin_prefix = $this->get_plugin_prefix();
 
 	<form method="post" action="">
 
-		<input type="hidden" name="wpc2_iec_generate_default_options" value="1" />
+		<input type="hidden" name="wpc2_generate_default_options" value="1" />
 
 		<?php submit_button( 'Display PHP Array of Default Options' ); ?>
 
 	</form>
 
-	<?php if ( isset( $_POST['wpc2_iec_generate_default_options_php'] ) && $_POST['wpc2_iec_generate_default_options_php'] ) : ?>
+	<form method="post" action="">
+
+		<input type="hidden" name="wpc2_restore_default_options" value="1" />
+
+		<?php submit_button( 'Restore Default Options' ); ?>
+
+	</form>
+
+	<?php if ( isset( $_POST['wpc2_generate_default_options_php'] ) && $_POST['wpc2_generate_default_options_php'] ) : ?>
 
 		<div>
 
@@ -49,7 +57,7 @@ $plugin_prefix = $this->get_plugin_prefix();
 
 	<?php endif; ?>
 
-	<?php if ( isset( $_POST['wpc2_iec_generate_default_options'] ) && $_POST['wpc2_iec_generate_default_options'] ) : ?>
+	<?php if ( isset( $_POST['wpc2_generate_default_options'] ) && $_POST['wpc2_generate_default_options'] ) : ?>
 
 		<div>
 
@@ -58,6 +66,22 @@ $plugin_prefix = $this->get_plugin_prefix();
 			<div class="postbox">
 
 				<?php $this->display_customizer_options(); ?>
+
+			</div>
+
+		</div>
+
+	<?php endif; ?>
+
+	<?php if ( isset( $_POST['wpc2_restore_default_options'] ) && $_POST['wpc2_restore_default_options'] ) : ?>
+
+		<div>
+
+			<h3><?php echo __( 'Restoring Default Options', 'wpc-import-export-customizer' ); ?></h3>
+
+			<div class="postbox">
+
+				<?php $this->restore_default_options(); ?>
 
 			</div>
 
