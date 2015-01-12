@@ -36,6 +36,10 @@ Thank you so much for even considering supporting my work. If you have benefited
 
 == Changelog ==
 
+= Version 1.5
+
+* Added readme.txt
+
 = Version 1.4
 
 * Added button to restore default options

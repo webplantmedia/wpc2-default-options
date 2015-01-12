@@ -41,7 +41,7 @@ class WPC2_Default_Options_Admin {
 	 */
 	protected $plugin_screen_hook_suffix = null;
 
-	const VERSION = '1.4';
+	const VERSION = '1.5';
 
 	/**
 	 * Initialize the plugin by loading admin scripts & styles and adding a

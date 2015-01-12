@@ -5,7 +5,7 @@ Plugin URI: http://webplantmedia.com/starter-themes/wordpresscanvas/features/plu
 Description: Generate default options PHP file for WP Canvas 2
 Author: Chris Baldelomar
 Author URI: http://webplantmedia.com/
-Version: 1.4
+Version: 1.5
 License: GPLv2 or later
 */
 
