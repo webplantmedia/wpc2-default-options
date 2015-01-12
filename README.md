@@ -36,6 +36,10 @@ Thank you so much for even considering supporting my work. If you have benefited
 
 ## Changelog ##
 
+### Version 1.4
+
+* Added button to restore default options
+
 ### Version 1.3
 
 * Plugin released.  Everything is new!
